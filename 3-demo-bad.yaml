@@ -1,0 +1,50 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: google
+  namespace: default
+spec:
+  addresses:
+  - 240.0.0.5
+  endpoints:
+  - address: www.google.com
+    labels:
+      to: google
+    ports:
+      http: 80
+  - address: www.slashdot.org
+    labels:
+      to: slash
+    ports:
+      http: 80
+  hosts:
+  - foo.bar.global
+  location: MESH_INTERNAL
+  ports:
+  - name: http
+    number: 80
+    protocol: http
+  resolution: DNS
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: google
+  namespace: default
+spec:
+  host: foo.bar.global
+  subsets:
+  - labels:
+      to: google
+    name: sub-google
+  - labels:
+      to: slash
+    name: sub-slash
+  - labels:
+      to: non-matching-label
+    name: sub-error
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

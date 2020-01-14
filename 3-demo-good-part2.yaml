@@ -1,0 +1,23 @@
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: google
+  namespace: default
+spec:
+  host: foo.bar.global
+  subsets:
+  - labels:
+      to: google
+    name: sub-google
+  - labels:
+      to: slash
+    name: sub-slash
+  # XXX: demo-good has all labels matched
+  #- labels:
+  #    to: non-matching-label
+  #  name: sub-error
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
