@@ -7,6 +7,8 @@ spec:
   addresses:
   - 240.0.0.5
   endpoints:
+  # XXX: indeed, these won't understand mTLS; but this is just for a quick demp
+  # in my original production setup i'm using actual istio endpoints here
   - address: www.google.com
     labels:
       to: google
